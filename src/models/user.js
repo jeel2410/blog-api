@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 const validator=require('validator');
 const bcrypt=require('bcryptjs')
 const jwt=require('jsonwebtoken')
-const Task =require('./task')
+const Blog =require('./blog')
 
 
 const userschema=mongoose.Schema({
@@ -10,15 +10,6 @@ const userschema=mongoose.Schema({
         type:String,
         required:true,
         trim:true
-    },
-    age:{
-        type:Number,
-        default:0,
-        validate(value){
-            if(value<0){
-                throw new Error('age must be positive number ')
-            }
-        }
     },
     email:{
         type:String,
@@ -44,22 +35,24 @@ const userschema=mongoose.Schema({
         }
 
     },
+    role:{
+        type:String,
+        default:"user"
+    },
     tokens:[{
         token:{
             type:String,
             required:true
         }
     }],
-    avatar:{
-        type:Buffer
-    }
+    
 },{
     timestamps:true
     
 })
 
-userschema.virtual('tasks',{
-    ref:'Task',
+userschema.virtual('blogs',{
+    ref:'Blog',
     localField:'_id',
     foreignField:'owner'
 })
